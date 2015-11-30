@@ -18,20 +18,18 @@ local function printValue(avalue, indent, name)
 		if name then
 			print(string.format("%s['%s'] = {", indent, name))
 		else
-			print(string.format("{", indent))
+			print(string.format("%s{", indent))
 		end
 
 		if #avalue > 0 then
 			-- it's a list,so use ipairs
 			for _, value in ipairs(avalue) do
-				printValue(value, indent..'\t')
-				--print(string.format("%s\t'%s',",indent, literalForValue(value)))
+				printValue(value, indent..'    ')
 			end
 		else
 			-- assume it's a dictionary, so use pairs
 			for key, value in pairs(avalue) do
-				printValue(value, indent..'\t', key)
-				--print(string.format("%s\t['%s'] = %s,",indent, key, literalForValue(value)))
+				printValue(value, indent..'    ', key)
 			end
 		end
 		print(string.format("%s};", indent))

@@ -24,6 +24,56 @@ Decoders.uptime = getRawFile
 
 
 -- specific decoders
+
+
+function Decoders.cmdline(path)
+	-- open the file
+	-- return full contents as a string
+	local f = io.open(path)
+	local str = f:read("*a")
+
+	local tbl = {}
+	for _, str in striter.mstrziter(str) do
+		table.insert(tbl,str)
+	end
+
+	return tbl;
+end
+
+function Decoders.cpuinfo(path)
+	path = path or "/proc/cpuinfo"
+
+	local tbl = {}
+	local currentTbl = {}
+	for str in io.lines(path) do
+		if str == "" then
+			tbl[currentTbl.processor] = currentTbl
+			currentTbl = {}
+		else
+			-- each of these is ':' delimited
+			local key, value = strutil.split(str,":")
+			key = strutil.trim(key):gsub(' ','_')
+
+
+			if value ~= "" then 
+				value = strutil.trim(value)
+			end
+
+			if key == 'flags' then
+				value = strutil.tsplit(value, ' ')
+			else
+				value = tonumber(value) or value
+				if value == "yes" then
+					value = true
+				end
+			end
+			currentTbl[key] = value;
+		end
+	end
+
+	return tbl
+end
+
 function Decoders.environ(path)
 	-- open the file
 	-- return full contents as a string
@@ -45,50 +95,6 @@ function Decoders.environ(path)
 	end
 
 	return tbl;
-end
-
-function Decoders.cmdline(path)
-	-- open the file
-	-- return full contents as a string
-	local f = io.open(path)
-	local str = f:read("*a")
-
-	local tbl = {}
-	for _, str in striter.mstrziter(str) do
-		table.insert(tbl,str)
-	end
-
-	return tbl;
-end
-
-function Decoders.cpuinfo(path)
-	path = path or "/proc/cpuinfo"
-
-	local tbl = {}
-	for str in io.lines(path) do
-		if str ~= "" then
-			-- each of these is ':' delimited
-			local key, value = strutil.split(str,":")
-			key = strutil.trim(key):gsub(' ','_')
-
-
-			if value ~= "" then 
-				value = strutil.trim(value)
-			end
-
-			if key == 'flags' then
-				value = strutil.tsplit(value, ' ')
-			else
-				value = tonumber(value) or value
-				if value == "yes" then
-					value = true
-				end
-			end
-			tbl[key] = value;
-		end
-	end
-
-	return tbl
 end
 
 function Decoders.io(path)
