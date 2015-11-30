@@ -30,3 +30,20 @@ The meat of it is the one call: procfs.cpuinfo
 
 This will return a table, which contains the already parsed information.  Numeric values become lua numbers, the word "yes", becomes a boolean 'true', and everything else becomes a quoted string.  Since you now have a table,
 you can easily use that in any way within your lua program.
+
+There are a number of tasks which become fairly easy to perform from within lua script, such as 
+counting the number of processes that are currently running in the system.
+
+```lua
+#!/usr/bin/env luajit
+package.path = "../?.lua;"..package.path;
+
+local procfs = require("lj2procfs.procfs")
+local fun = require("lj2procfs.fun")
+
+print("Num Procs: ", fun.length(procfs.processes()))
+```
+
+Of course you could already do this by simply running 'ps', or some other command line tool.  The benefit
+of having this binding, is that you can easily perform the task without having to shell out to get
+simple tasks done.  This makes it far easier to incorporate the information into an automated workflow.
