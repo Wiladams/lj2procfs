@@ -2,6 +2,8 @@
 local fs = require("lj2procfs.fs-util")
 local libc = require("lj2procfs.libc")
 local fun = require("lj2procfs.fun")
+local Decoders = require("lj2procfs.Decoders")
+
 
 
 local ProcessEntry = {}

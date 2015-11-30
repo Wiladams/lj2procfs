@@ -38,10 +38,14 @@ local function iterate_files_in_directory(path)
             end
         end
 
-    
-        local name = ffi.string(de.d_name);
+        local entry = {
+            Name = ffi.string(de.d_name);
+            Kind = de.d_type;
+            INode = de.d_ino;
+        }
+        entry.Path = path..'/'..entry.Name;
 
-        return de, name
+        return de, entry
     end
     
     -- make sure to do the finalizer
@@ -70,6 +74,8 @@ local function entries_in_directory(path)
             Kind = de.d_type;
             INode = de.d_ino;
         }
+        entry.Path = path..'/'..entry.Name;
+
         return de, entry
     end
 
