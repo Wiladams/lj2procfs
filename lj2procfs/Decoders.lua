@@ -47,7 +47,7 @@ function Decoders.cpuinfo(path)
 	local currentTbl = {}
 	for str in io.lines(path) do
 		if str == "" then
-			tbl[currentTbl.processor] = currentTbl
+			table.insert(tbl, currentTbl)
 			currentTbl = {}
 		else
 			-- each of these is ':' delimited

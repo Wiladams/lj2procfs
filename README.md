@@ -31,6 +31,34 @@ The meat of it is the one call: procfs.cpuinfo
 This will return a table, which contains the already parsed information.  Numeric values become lua numbers, the word "yes", becomes a boolean 'true', and everything else becomes a quoted string.  Since you now have a table,
 you can easily use that in any way within your lua program.
 
+If you wanted to perform a task such as list which processors are associated with which cores,
+you could do the following:
+
+```lua
+local procfs = require("lj2procfs.procfs")
+local fun = require("lj2procfs.fun")
+
+
+local function printInfo(processor)
+	print(string.format("processor: %d, core: %d", processor.processor, processor.core_id))
+end
+
+fun.each(printInfo, procfs.cpuinfo)
+```
+
+And the output might look something like this
+
+```lua
+processor: 0, core: 0
+processor: 1, core: 1
+processor: 2, core: 2
+processor: 3, core: 3
+processor: 4, core: 0
+processor: 5, core: 1
+processor: 6, core: 2
+processor: 7, core: 3
+```
+
 There are a number of tasks which become fairly easy to perform from within lua script, such as 
 counting the number of processes that are currently running in the system.
 
