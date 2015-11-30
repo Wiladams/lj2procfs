@@ -4,6 +4,9 @@ package.path = "../?.lua;"..package.path;
 local procfs = require("lj2procfs.procfs")
 local fun = require("lj2procfs.fun")
 local Decoders = require("lj2procfs.Decoders")
+local putil = require("lj2procfs.print-util")
+
+
 
 local function printTable(name, tbl, indent)
 	indent = indent or ""
@@ -30,7 +33,8 @@ local function printFile(entry)
 	if mapper then
 		local mapped = mapper(entry.Path)
 		if type(mapped) == "table" then
-			printTable(entry.Name, mapped, indent)
+			putil.printValue(mapped, indent, entry.Name)
+			--printTable(entry.Name, mapped, indent)
 		elseif type(mapped) == "string" then
 			print(string.format("%s['%s'] = [[%s]],", indent, entry.Name, mapped))
 		end

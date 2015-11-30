@@ -28,6 +28,9 @@ function Decoders.environ(path)
 	-- open the file
 	-- return full contents as a string
 	local f = io.open(path)
+	
+	if not f then return nil end
+
 	local str = f:read("*a")
 
 	local tbl = {}
