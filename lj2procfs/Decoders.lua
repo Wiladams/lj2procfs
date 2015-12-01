@@ -18,6 +18,7 @@ end
 -- some raw files, not decoded
 Decoders.fb = getRawFile
 Decoders.filesystems= getRawFile
+Decoders.loginuid = getRawFile
 Decoders.stat = getRawFile
 Decoders.uptime = getRawFile
 
@@ -86,10 +87,10 @@ function Decoders.environ(path)
 	local tbl = {}
 	-- The environment variables are separated by a null
 	-- terminator, so the outer iterator is over that
-	for _, str in striter.mstrziter(str) do
+	for _, elem in striter.mstrziter(str) do
 			-- Each individual environment variable is a
 			-- key=value pair, so we split those apart.
-			local key, value = strutil.split(str,"=")
+			local key, value = strutil.split(elem,"=")
 			tbl[key] = value;
 			--print("environ: ", key, value)
 	end
@@ -138,6 +139,25 @@ function Decoders.mounts(path)
 end
 
 
+
+function Decoders.sched(path)
+	local tbl = {}
+	-- skip first two lines
+	local linesToSkip = 2
+	for str in io.lines(path) do
+		if linesToSkip > 0 then
+			linesToSkip = linesToSkip - 1;
+		elseif str:find(":") then
+			-- each of these is ':' delimited
+			local key, value = strutil.split(str,":")
+			key = strutil.trim(key)
+			value = tonumber(value)
+			tbl[key] = value;
+		end
+	end
+
+	return tbl
+end
 
 
 function Decoders.status(path)

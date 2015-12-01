@@ -75,3 +75,50 @@ print("Num Procs: ", fun.length(procfs.processes()))
 Of course you could already do this by simply running 'ps', or some other command line tool.  The benefit
 of having this binding, is that you can easily perform the task without having to shell out to get
 simple tasks done.  This makes it far easier to incorporate the information into an automated workflow.
+
+If you wanted to go all out and print all the information about all the processes currently  running
+on the machine, you could do the following:
+
+```lua
+local procfs = require("lj2procfs.procfs")
+local fun = require("lj2procfs.fun")
+local putil = require("lj2procfs.print-util")
+
+
+local function printProcEntry(procEntry)
+	print(string.format("\t[%d] = {", procEntry.Id))
+
+	for _, fileEntry in procEntry:files() do
+		local fileValue = procEntry[fileEntry.Name]
+		putil.printValue(fileValue, '\t\t', fileEntry.Name)
+	end
+
+	print(string.format("\t},"))
+end
+
+
+print(string.format("return {"))
+fun.each(printProcEntry, procfs.processes())
+print(string.format("}"))
+```
+Which might generate some output, which partially looks like:
+
+```lua
+return {
+	[1] = {
+		['environ'] = {
+		    PATH = [[/sbin:/usr/sbin:/bin:/usr/bin]],
+		    HOME = [[/]],
+		    rootmnt = [[/root]],
+		    recovery = '',
+		    PWD = [[/]],
+		    TERM = [[linux]],
+		    BOOT_IMAGE = [[/vmlinuz-3.19.0-26-generic.efi.signed]],
+		    init = [[/sbin/init]],
+		};
+		auxv = [[nil]],
+```
+
+Of course, you don't have to generate any output at all.  You could just form
+queries whereby you iterate over processes, looking for specific attributes, and 
+delivering some action based on seeing those attributes.

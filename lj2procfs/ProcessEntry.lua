@@ -15,7 +15,19 @@ setmetatable(ProcessEntry, {
 
 
 local ProcessEntry_mt = {
-	__index = ProcessEntry;
+	__index = function(self, key)
+		if ProcessEntry[key] then
+			return ProcessEntry[key]
+		end
+
+		-- we are essentially a sub-class of Decoders
+		if Decoders[key] then
+			local path = self.Path..'/'..key;
+			return Decoders[key](path);
+		end
+
+		return nil
+	end,
 }
 
 function ProcessEntry.init(self, procId)
@@ -32,9 +44,6 @@ function ProcessEntry.new(self, procId)
 	return self:init(procId)
 end
 
-function ProcessEntry.directories(self)
-	return nil;
-end
 
 function ProcessEntry.files(self)
 	return fs.files_in_directory(self.Path)
