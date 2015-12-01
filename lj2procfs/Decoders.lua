@@ -16,11 +16,20 @@ local function getRawFile(path)
 end
 
 -- some raw files, not decoded
+Decoders.consoles = getRawFile
+Decoders.crypto = getRawFile
+Decoders.devices = getRawFile
+Decoders.diskstats = getRawFile
+Decoders.dma = getRawFile
+Decoders.execdomains = getRawFile
 Decoders.fb = getRawFile
 Decoders.filesystems= getRawFile
+Decoders.iomem = getRawFile
+Decoders.ioports = getRawFile
+Decoders.interrupts = getRawFile
 Decoders.loginuid = getRawFile
 Decoders.stat = getRawFile
-Decoders.uptime = getRawFile
+
 
 
 
@@ -104,6 +113,23 @@ function Decoders.io(path)
 		-- each of these is ':' delimited
 		local key, value = strutil.split(str,":")
 		tbl[key] = value;
+	end
+
+	return tbl
+end
+
+function Decoders.kallsyms(path)
+	path = path or "/proc/kallsyms"
+
+	local tbl = {}
+	--local pattern = "(%d+)%s+(%g+)$s+(%g+)"
+	local pattern = "(%x+)%s+(%g+)%s+(%g+)"
+
+	for str in io.lines(path)  do
+		local loc, kind, name = str:match(pattern)
+		if name then
+			tbl[name] = {kind = kind, location = loc}
+		end
 	end
 
 	return tbl
@@ -209,14 +235,54 @@ function Decoders.status(path)
 	return tbl;
 end
 
+--[[
+	seconds idle 
+
+	The first value is the number of seconds the system has been up.
+	The second number is the accumulated number of seconds all processors
+	have spent idle.  The second number can be greater than the first
+	in a multi-processor system.
+--]]
 function Decoders.uptime(path)
+	path = path or "/proc/uptime"
 	-- open the file
 	-- return full contents as a string
 	local f = io.open(path)
 	local str = f:read("*a")
 	f:close()
 
-	return str;
+	local seconds, idle = str:match("(%d*%.?%d+)%s+(%d*%.?%d+)")
+	return {
+		seconds = tonumber(seconds);
+		idle = tonumber(idle);
+	}
+
+end
+
+function Decoders.version(path)
+	path = path or "/proc/version"
+	return getRawFile(path)
+end
+
+function Decoders.version_signature(path)
+	path = path or "/proc/version_signature"
+	return getRawFile(path)
+end
+
+function Decoders.vmstat(path)
+	local path = path or "/proc/vmstat"
+
+	local tbl = {}
+	local pattern = "(%g+)%s+(%d+)"
+
+	for str in io.lines(path) do
+		local key, value = str:match(pattern)
+		if key then
+			tbl[key] = tonumber(value)
+		end
+	end
+
+	return tbl;
 end
 
 return Decoders

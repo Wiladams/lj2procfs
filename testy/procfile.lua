@@ -28,7 +28,22 @@ package.path = "../?.lua;"..package.path;
 local procfs = require("lj2procfs.procfs")
 local putil = require("lj2procfs.print-util")
 
-assert(arg[1], "MUST specify a filename")
+if not arg[1] then
+	print ([[
+
+USAGE: 
+	$ sudo ./procfile <filename>
+
+where <filename> is the name of a file in the /proc
+directory.
+
+Example:
+	$ sudo ./pocfile cpuinfo
+]])
+
+	return 
+end
+
 
 local filename = arg[1]
 

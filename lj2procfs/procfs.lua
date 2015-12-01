@@ -11,7 +11,7 @@ local procfs = {}
 setmetatable(procfs, {
 	__index = function(self, key)
 		if Decoders[key] then
-			return Decoders[key]();
+			return Decoders[key]("/proc/"..key);
 		end
 
 		return "NO DECODER AVAILABLE";
