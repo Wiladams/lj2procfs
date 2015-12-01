@@ -14,7 +14,7 @@ setmetatable(procfs, {
 			return Decoders[key]();
 		end
 
-		return nil;
+		return "NO DECODER AVAILABLE";
 	end,
 })
 

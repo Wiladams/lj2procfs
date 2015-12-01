@@ -129,6 +129,24 @@ function Decoders.limits(path)
 	return tbl;
 end
 
+function Decoders.meminfo(path)
+	path = path or "/proc/meminfo"
+	local tbl = {}
+	--local pattern = "(%g+):%s+(%d+)%s+(%g+)"
+	local pattern = "(%g+):%s+(%d+)%s+(%g+)"
+
+	for str in io.lines(path) do
+		local name, size, units = str:match(pattern)
+		print(name, size, units)
+		if name then
+			tbl[name] = tonumber(size);
+		end
+	end
+
+	return tbl
+end
+
+
 function Decoders.mounts(path)
 	local tbl = {}
 	for str in io.lines(path) do
@@ -139,6 +157,26 @@ function Decoders.mounts(path)
 end
 
 
+function Decoders.partitions(path)
+	path = path or "/proc/partitions"
+
+	local tbl = {}
+
+	local pattern = "%s*(%d+)%s+(%d+)%s+(%d+)%s+(%g+)"
+	local linesToSkip = 2;
+	for str in io.lines(path) do
+		if linesToSkip > 0 then
+			linesToSkip = linesToSkip - 1;
+		else
+			local major, minor, blocks, name = str:match(pattern)
+			if name then
+				tbl[name] = {major = tonumber(major), minor = tonumber(minor), blocks = tonumber(blocks)}
+			end
+		end
+	end
+
+	return tbl
+end
 
 function Decoders.sched(path)
 	local tbl = {}
