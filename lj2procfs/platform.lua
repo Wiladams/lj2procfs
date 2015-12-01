@@ -7,14 +7,22 @@ typedef long time_t;
 typedef long suseconds_t;
 ]]
 
-
+if ffi.abi("64bit") then
+ffi.cdef[[
+typedef int64_t off_t;
+typedef int64_t ino_t;
+]]
+else
+ffi.cdef[[
+typedef int off_t;
+typedef int ino_t;
+]]
+end
 
 -- These should be good for all versions of Linux
 ffi.cdef[[
 typedef unsigned int 	mode_t;
 typedef unsigned int 	nlink_t;
-typedef int64_t 		off_t;
-typedef uint64_t 		ino_t;
 typedef uint64_t 		dev_t;
 typedef long 			blksize_t;
 typedef int64_t 		blkcnt_t;
