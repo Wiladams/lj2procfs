@@ -26,7 +26,7 @@ local ProcessEntry_mt = {
 			return Decoders[key](path);
 		end
 
-		return nil
+		return "NO DECODER AVAILABLE"
 	end,
 }
 
