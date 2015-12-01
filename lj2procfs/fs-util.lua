@@ -41,14 +41,14 @@ local function iterate_files_in_directory(path)
         }
         entry.Path = path..'/'..entry.Name;
 
-        return de, entry
+        return state, entry
     end
     
     -- make sure to do the finalizer
     -- for garbage collection
     ffi.gc(dir, libc.closedir);
 
-    return gen_files, dir, initial;
+    return gen_files, dir, dir;
 end
 
 local function entries_in_directory(path)

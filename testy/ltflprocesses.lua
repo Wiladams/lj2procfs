@@ -1,3 +1,4 @@
+#!/usr/bin/env luajit
 --test_procfs_procids.lua
 package.path = "../?.lua;"..package.path;
 
