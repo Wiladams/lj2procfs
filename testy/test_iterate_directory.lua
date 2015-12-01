@@ -9,13 +9,13 @@ local fun = require("lj2procfs.fun")
 
 local function printFiles(path)
 	for _, file in fs.files_in_directory(path) do
-		print(file)
+		print(file.Name)
 	end
 end
 
 local function printEntries(path)
+	print("printEntries: ", path)
 	for _, entry in fs.entries_in_directory(path) do
-		--print(entry)
 		print(entry.Name, libc.DT_DIR == entry.Kind)
 	end
 end

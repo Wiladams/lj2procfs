@@ -9,10 +9,6 @@ local function nil_iter()
     return nil;
 end
 
-
-
-
-
 local function iterate_files_in_directory(path)
     local dir = libc.opendir(path)
 
@@ -65,7 +61,6 @@ local function entries_in_directory(path)
     -- the iteration over files
     local function gen_entries(dir, state)
         local de = libc.readdir(dir)
-
         -- if we've run out of entries, then return nil
         if de == nil then return nil end
 
@@ -76,14 +71,14 @@ local function entries_in_directory(path)
         }
         entry.Path = path..'/'..entry.Name;
 
-        return de, entry
+        return state, entry
     end
 
     -- make sure to do the finalizer
     -- for garbage collection
     --ffi.gc(dir, libc.closedir);
 
-    return gen_entries, dir, nil;
+    return gen_entries, dir, dir;
 end
 
 
