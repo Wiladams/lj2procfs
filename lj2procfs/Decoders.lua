@@ -69,7 +69,7 @@ function Decoders.cpuinfo(path)
 				value = strutil.trim(value)
 			end
 
-			if key == 'flags' then
+			if key == 'flags' or key == "Features" then
 				value = strutil.tsplit(value, ' ')
 			else
 				value = tonumber(value) or value
