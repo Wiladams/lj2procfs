@@ -15,7 +15,7 @@ local fun = require("lj2procfs.fun")
 
 
 local function printInfo(processor)
-	print(string.format("processor: %d, core: %d", processor.processor, processor.core_id))
+	print(string.format("processor: %d, core: %s", processor.processor, tostring(processor.core_id)))
 end
 
 fun.each(printInfo, procfs.cpuinfo)

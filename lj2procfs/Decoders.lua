@@ -31,10 +31,6 @@ setmetatable(Decoders, {
 
 
 
-
--- specific decoders
-
-
 function Decoders.environ(path)
 	-- open the file
 	-- return full contents as a string
