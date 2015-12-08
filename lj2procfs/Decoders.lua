@@ -30,6 +30,7 @@ setmetatable(Decoders, {
 })
 
 
+-- Specific to processes
 
 function Decoders.environ(path)
 	-- open the file
@@ -54,6 +55,7 @@ function Decoders.environ(path)
 	return tbl;
 end
 
+
 function Decoders.io(path)
 	local tbl = {}
 	for str in io.lines(path) do
@@ -65,22 +67,6 @@ function Decoders.io(path)
 	return tbl
 end
 
-function Decoders.kallsyms(path)
-	path = path or "/proc/kallsyms"
-
-	local tbl = {}
-	--local pattern = "(%d+)%s+(%g+)$s+(%g+)"
-	local pattern = "(%x+)%s+(%g+)%s+(%g+)"
-
-	for str in io.lines(path)  do
-		local loc, kind, name = str:match(pattern)
-		if name then
-			tbl[name] = {kind = kind, location = loc}
-		end
-	end
-
-	return tbl
-end
 
 --[[
 	Limits associated with each of the proc's resources
@@ -101,8 +87,6 @@ function Decoders.limits(path)
 
 	return tbl;
 end
-
-
 
 
 function Decoders.mounts(path)
@@ -148,20 +132,5 @@ end
 
 
 
-function Decoders.vmstat(path)
-	local path = path or "/proc/vmstat"
-
-	local tbl = {}
-	local pattern = "(%g+)%s+(%d+)"
-
-	for str in io.lines(path) do
-		local key, value = str:match(pattern)
-		if key then
-			tbl[key] = tonumber(value)
-		end
-	end
-
-	return tbl;
-end
 
 return Decoders
