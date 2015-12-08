@@ -4,9 +4,6 @@ local fun = require("lj2procfs.fun")
 local striter= require("lj2procfs.striter")
 local strutil = require("lj2procfs.string-util")
 
-
-local Decoders = {}
-
 local function getRawFile(path)
 	local f = io.open(path)
 	local str = f:read("*a")
@@ -15,74 +12,28 @@ local function getRawFile(path)
 	return str;
 end
 
--- some raw files, not decoded
-Decoders.consoles = getRawFile
-Decoders.crypto = getRawFile
-Decoders.devices = getRawFile
-Decoders.diskstats = getRawFile
-Decoders.dma = getRawFile
-Decoders.execdomains = getRawFile
-Decoders.fb = getRawFile
-Decoders.filesystems= getRawFile
-Decoders.iomem = getRawFile
-Decoders.ioports = getRawFile
-Decoders.interrupts = getRawFile
-Decoders.loginuid = getRawFile
-Decoders.stat = getRawFile
+
+local Decoders = {}
+local function findDecoder(self, key)
+	local path = "lj2procfs.codecs."..key;
+	local success, codec = pcall(function() return require(path) end)
+
+	if success and codec.decoder then
+		return codec.decoder;
+	end
+
+	return getRawFile;
+end
+setmetatable(Decoders, {
+	__index = findDecoder;
+
+})
 
 
 
 
 -- specific decoders
 
-
-function Decoders.cmdline(path)
-	-- open the file
-	-- return full contents as a string
-	local f = io.open(path)
-	local str = f:read("*a")
-
-	local tbl = {}
-	for _, str in striter.mstrziter(str) do
-		table.insert(tbl,str)
-	end
-
-	return tbl;
-end
-
-function Decoders.cpuinfo(path)
-	path = path or "/proc/cpuinfo"
-
-	local tbl = {}
-	local currentTbl = {}
-	for str in io.lines(path) do
-		if str == "" then
-			table.insert(tbl, currentTbl)
-			currentTbl = {}
-		else
-			-- each of these is ':' delimited
-			local key, value = strutil.split(str,":")
-			key = strutil.trim(key):gsub(' ','_')
-
-
-			if value ~= "" then 
-				value = strutil.trim(value)
-			end
-
-			if key == 'flags' then
-				value = strutil.tsplit(value, ' ')
-			else
-				value = tonumber(value) or value
-				if value == "yes" then
-					value = true
-				end
-			end
-			currentTbl[key] = value;
-		end
-	end
-
-	return tbl
-end
 
 function Decoders.environ(path)
 	-- open the file
@@ -155,22 +106,7 @@ function Decoders.limits(path)
 	return tbl;
 end
 
-function Decoders.meminfo(path)
-	path = path or "/proc/meminfo"
-	local tbl = {}
-	--local pattern = "(%g+):%s+(%d+)%s+(%g+)"
-	local pattern = "(%g+):%s+(%d+)%s+(%g+)"
 
-	for str in io.lines(path) do
-		local name, size, units = str:match(pattern)
-		print(name, size, units)
-		if name then
-			tbl[name] = tonumber(size);
-		end
-	end
-
-	return tbl
-end
 
 
 function Decoders.mounts(path)
@@ -182,27 +118,6 @@ function Decoders.mounts(path)
 	return tbl
 end
 
-
-function Decoders.partitions(path)
-	path = path or "/proc/partitions"
-
-	local tbl = {}
-
-	local pattern = "%s*(%d+)%s+(%d+)%s+(%d+)%s+(%g+)"
-	local linesToSkip = 2;
-	for str in io.lines(path) do
-		if linesToSkip > 0 then
-			linesToSkip = linesToSkip - 1;
-		else
-			local major, minor, blocks, name = str:match(pattern)
-			if name then
-				tbl[name] = {major = tonumber(major), minor = tonumber(minor), blocks = tonumber(blocks)}
-			end
-		end
-	end
-
-	return tbl
-end
 
 function Decoders.sched(path)
 	local tbl = {}
@@ -235,39 +150,7 @@ function Decoders.status(path)
 	return tbl;
 end
 
---[[
-	seconds idle 
 
-	The first value is the number of seconds the system has been up.
-	The second number is the accumulated number of seconds all processors
-	have spent idle.  The second number can be greater than the first
-	in a multi-processor system.
---]]
-function Decoders.uptime(path)
-	path = path or "/proc/uptime"
-	-- open the file
-	-- return full contents as a string
-	local f = io.open(path)
-	local str = f:read("*a")
-	f:close()
-
-	local seconds, idle = str:match("(%d*%.?%d+)%s+(%d*%.?%d+)")
-	return {
-		seconds = tonumber(seconds);
-		idle = tonumber(idle);
-	}
-
-end
-
-function Decoders.version(path)
-	path = path or "/proc/version"
-	return getRawFile(path)
-end
-
-function Decoders.version_signature(path)
-	path = path or "/proc/version_signature"
-	return getRawFile(path)
-end
 
 function Decoders.vmstat(path)
 	local path = path or "/proc/vmstat"

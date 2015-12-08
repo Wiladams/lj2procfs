@@ -50,6 +50,14 @@ function F.tsplit(s,sep)
    return accumulate({}, gsplit(s,sep))
 end
 
+function F.tsplitbool(s, sep)
+	local tbl={}
+	for v in gsplit(s,sep) do
+		tbl[v] = true;
+	end
+	return tbl
+end
+
 function F.trim(s)
 	local from = s:match"^%s*()"
  	return from > #s and "" or s:match(".*%S", from)
