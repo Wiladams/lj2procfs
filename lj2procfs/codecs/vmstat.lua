@@ -1,5 +1,5 @@
 
-local function decoder(path)
+local function vmstat(path)
 	local path = path or "/proc/vmstat"
 
 	local tbl = {}
@@ -16,5 +16,5 @@ local function decoder(path)
 end
 
 return {
-	decoder = decoder;
+	decoder = vmstat;
 }

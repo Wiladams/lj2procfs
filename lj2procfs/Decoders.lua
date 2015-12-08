@@ -16,12 +16,17 @@ end
 local Decoders = {}
 local function findDecoder(self, key)
 	local path = "lj2procfs.codecs."..key;
+
+	-- try to load the intended codec file
 	local success, codec = pcall(function() return require(path) end)
 
 	if success and codec.decoder then
 		return codec.decoder;
 	end
 
+	-- if we didn't find a decoder, use the generic raw file loading
+	-- decoder.
+	-- Caution: some of those files can be very large!
 	return getRawFile;
 end
 setmetatable(Decoders, {

@@ -1,7 +1,7 @@
 -- can be used for both /proc/cmdline, and /proc/[pid]/cmdline
 local striter= require("lj2procfs.striter")
 
-function decoder(path)
+local function decoder(path)
 	-- open the file
 	-- return full contents as a string
 	local f = io.open(path)
