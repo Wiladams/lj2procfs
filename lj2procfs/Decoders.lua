@@ -19,7 +19,6 @@ local function findDecoder(self, key)
 
 	-- try to load the intended codec file
 	local success, codec = pcall(function() return require(path) end)
-
 	if success and codec.decoder then
 		return codec.decoder;
 	end
