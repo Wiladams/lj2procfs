@@ -1,7 +1,6 @@
-local function decoder(path)
+local function meminfo(path)
 	path = path or "/proc/meminfo"
 	local tbl = {}
-	--local pattern = "(%g+):%s+(%d+)%s+(%g+)"
 	local pattern = "(%g+):%s+(%d+)%s+(%g+)"
 
 	for str in io.lines(path) do
@@ -18,5 +17,5 @@ local function decoder(path)
 end
 
 return {
-	decoder = decoder;
+	decoder = meminfo;
 }

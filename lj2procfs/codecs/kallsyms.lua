@@ -7,7 +7,7 @@ local function kallsyms(path)
 	for str in io.lines(path)  do
 		local loc, kind, name = str:match(pattern)
 		if name then
-			tbl[name] = {kind = kind, location = loc}
+			tbl[name] = {name = name, kind = kind, location = loc}
 		end
 	end
 
