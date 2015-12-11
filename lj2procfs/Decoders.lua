@@ -12,9 +12,15 @@ local function getRawFile(path)
 	return str;
 end
 
+local decoderMap = {
+	["net/netstat"] = "netstat" 	
+}
 
 local Decoders = {}
 local function findDecoder(self, key)
+	local substitute = decoderMap[key]
+	key = substitute or key
+
 	local path = "lj2procfs.codecs."..key;
 
 	-- try to load the intended codec file
