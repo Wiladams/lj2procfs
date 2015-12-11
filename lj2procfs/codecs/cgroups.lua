@@ -12,8 +12,9 @@ local function decoder(path)
 			local subsysName, hierarchy, numCgroups, enabled = str:match(pattern)
 			if subsysName then
 				tbl[subsysName] = {
-					hierarchy = tonumber(hierarchy),
-					numCgroups =  tonumber(numCgroups),
+					name = subsysName;
+					hierarchy = tonumber(hierarchy);
+					numCgroups =  tonumber(numCgroups);
 					enabled = tonumber(enabled) == 1;
 				}
 			end

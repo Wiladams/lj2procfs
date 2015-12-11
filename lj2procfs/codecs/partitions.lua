@@ -11,7 +11,12 @@ local function decoder(path)
 		else
 			local major, minor, blocks, name = str:match(pattern)
 			if name then
-				tbl[name] = {major = tonumber(major), minor = tonumber(minor), blocks = tonumber(blocks)}
+				tbl[name] = {
+					name = name, 
+					major = tonumber(major), 
+					minor = tonumber(minor), 
+					blocks = tonumber(blocks)
+				}
 			end
 		end
 	end
