@@ -17,7 +17,6 @@ mdstat
 misc
 mtrr
 pagetypeinfo
-partitions
 sched_debug
 schedstat
 slabinfo
@@ -30,5 +29,4 @@ timer_stats
 version
 version_signature
 vmallocinfo
-vmstat
 zoneinfo
