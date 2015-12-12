@@ -12,8 +12,11 @@ local function getRawFile(path)
 	return str;
 end
 
+-- Use this table if you want to map from the names that 
+-- are relative to the /proc directory, to values sitting
+-- directly within the codec directory
 local decoderMap = {
-	["net/netstat"] = "netstat" 	
+	--["net/netstat"] = "netstat" 	
 }
 
 local Decoders = {}
