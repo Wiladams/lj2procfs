@@ -16,13 +16,22 @@ end
 -- are relative to the /proc directory, to values sitting
 -- directly within the codec directory
 local decoderMap = {
+	["%d+/cwd"] = "linkchaser";
+	["%d+/exe"] = "linkchaser";
+	["%d+/root"] = "linkchaser";
 	--["net/netstat"] = "netstat" 	
 }
 
 local Decoders = {}
 local function findDecoder(self, key)
-	local substitute = decoderMap[key]
-	key = substitute or key
+	-- traverse through the mappings looking for a match
+	for pattern, value in pairs(decoderMap) do
+		if key:match(pattern) then
+			key = value
+			break;
+		end
+	end
+
 
 	local path = "lj2procfs.codecs."..key;
 

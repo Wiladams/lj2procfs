@@ -2,7 +2,6 @@ TODO - Flat files in /proc
 buddyinfo
 consoles
 devices
-diskstats
 dma
 execdomains
 filesystems
@@ -20,7 +19,6 @@ pagetypeinfo
 sched_debug
 schedstat
 slabinfo
-softirqs
 stat
 swaps
 sysrq-trigger

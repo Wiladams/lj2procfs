@@ -41,6 +41,8 @@ DIR           *opendir(const char *);
 struct dirent *readdir(DIR *);
 int            readdir_r(DIR *__restrict, struct dirent *__restrict, struct dirent **__restrict);
 
+ssize_t readlink(const char *__restrict, char *__restrict, size_t);
+
 ]]
 
 ffi.cdef[[

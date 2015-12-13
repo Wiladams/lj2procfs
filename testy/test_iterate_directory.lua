@@ -35,6 +35,6 @@ end
 
 local path = arg[1] or "/proc"
 
---printEntries(path)
+printEntries(path)
 --printFiles(path)
-printProcs();
+--printProcs();
