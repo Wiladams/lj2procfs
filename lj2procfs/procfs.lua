@@ -6,10 +6,34 @@ local ProcessEntry = require("lj2procfs.ProcessEntry")
 local Decoders = require("lj2procfs.Decoders")
 
 
+-- take a table with a 'Name' field, which 
+-- should be a numeric value, and return the 
+-- ProcessEntry for it
+local function toProcessEntry(entry)
+	return ProcessEntry(tonumber(entry.Name))
+end
+
 
 local procfs = {}
+local procfs_mt = {}
+
 setmetatable(procfs, {
 	__index = function(self, key)
+		-- if key is numeric, then return
+		-- a process entry 
+		if type(key) == "number" or tonumber(key) then
+			return ProcessEntry(tonumber(key))
+		end
+
+		-- otherwise, it's a string value, 
+		-- if it is the 'processes' key, then 
+		-- return the processes iterator
+		if key == "processes" then
+			return procfs_mt.processes
+		end
+
+		-- Finally, assume the key is a path  to one
+		-- of the files within the /proc hierarchy
 		if Decoders[key] then
 			return Decoders[key]("/proc/"..key);
 		end
@@ -18,29 +42,15 @@ setmetatable(procfs, {
 	end,
 })
 
-local function toProcId(entry)
-	return tonumber(entry.Name)
+
+
+function procfs_mt.processes()
+	return fun.map(toProcessEntry, fun.filter(
+		function(entry)
+			return (entry.Kind == libc.DT_DIR) and tonumber(entry.Name)
+		end, 
+		fs.entries_in_directory("/proc")))
 end
 
-local function toProcess(entry)
-	return ProcessEntry(toProcId(entry))
-end
-
-local function isProcess(entry)
-	local num = tonumber(entry.Name)
-	return entry.Kind == libc.DT_DIR and num
-end
-
-function procfs.processIds()
-	return fun.map(toProcId, fun.filter(isProcess, fs.entries_in_directory("/proc")))
-end
-
-function procfs.processes()
-	return fun.map(toProcess, fun.filter(isProcess, fs.entries_in_directory("/proc")))
-end
-
-function procfs.files()
-	return fs.files_in_directory("/proc")
-end
 
 return procfs

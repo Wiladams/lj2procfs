@@ -1,4 +1,35 @@
+AVAILABLE
+=========
+* cgroups
+* cmdline
+* cpuinfo
+* crypto
+* diskstats
+* interrupts
+* iomem
+* ioports
+* kallsyms
+* linkchaser - cwd, exe, root
+* loadavg
+* meminfo
+* modules
+* net
+* partitions
+* softirqs
+* uptime
+* vmstat
+
+Per Process
+-----------
+* environ
+* io
+* limits
+* mounts
+* status
+
+
 TODO - Flat files in /proc
+====
 buddyinfo
 consoles
 devices

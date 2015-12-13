@@ -23,7 +23,7 @@ local ProcessEntry_mt = {
 		-- we are essentially a sub-class of Decoders
 		if Decoders[key] then
 			local path = self.Path..'/'..key;
-			return Decoders[key](path);
+			return Decoders["process."..key](path);
 		end
 
 		return "NO DECODER AVAILABLE"
