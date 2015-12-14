@@ -1,5 +1,6 @@
 AVAILABLE
 =========
+* buddyinfo
 * cgroups
 * cmdline
 * cpuinfo
