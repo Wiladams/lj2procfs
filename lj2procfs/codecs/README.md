@@ -22,9 +22,12 @@ AVAILABLE
 Per Process
 -----------
 * environ
+* exe
 * io
 * limits
+* maps
 * mounts
+* sched
 * status
 
 

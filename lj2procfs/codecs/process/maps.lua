@@ -1,4 +1,10 @@
 --maps.lua
+-- perms
+-- r - read
+-- w - write
+-- x - execute
+-- s - shared
+-- p - private
 
 local function maps(path)
 	local tbl = {}
