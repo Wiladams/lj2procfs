@@ -4,9 +4,11 @@
 	This lua script acts similar to the 'free' command, which will
 	display some interesting information about how much memory is being
 	used in the system.
+
+	This example assumes lj2procfs is installed into the lua path
 --]]
---memfree.lua
-package.path = "../?.lua;"..package.path;
+
+--package.path = "../?.lua;"..package.path;
 
 local procfs = require("lj2procfs.procfs")
 

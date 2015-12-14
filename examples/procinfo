@@ -21,9 +21,11 @@
 		$ sudo ./procfile cpuinfo
 		$ sudo ./procfile partitions
 
+	This example assumes lj2procfs is installed into the lua path
+
 --]]
 
-package.path = "../?.lua;"..package.path;
+--package.path = "../?.lua;"..package.path;
 
 local procfs = require("lj2procfs.procfs")
 local putil = require("lj2procfs.print-util")
