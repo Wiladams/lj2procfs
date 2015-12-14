@@ -1,5 +1,15 @@
 local strutil = require("lj2procfs.string-util")
 
+-- Entries look like:
+--[[
+se.statistics.nr_wakeups_passive             :                    0
+se.statistics.nr_wakeups_idle                :                    0
+avg_atom                                     :             0.043153
+avg_per_cpu                                  :             0.247472
+--]]
+-- We want to break this out into a hierarchy of tables
+-- to make it easier to access
+
 local function addToTbl(tbl, key, value)
 	print("addToTbl: key")
 	local keyparts = strutil.tsplit(key, '%.')

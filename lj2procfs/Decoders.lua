@@ -32,6 +32,7 @@ local function findDecoder(self, key)
 
 
 	local path = "lj2procfs.codecs."..key;
+print("PATH: ", path)
 
 	-- try to load the intended codec file
 	local success, codec = pcall(function() return require(path) end)
@@ -48,9 +49,6 @@ setmetatable(Decoders, {
 	__index = findDecoder;
 
 })
-
-
-
 
 
 return Decoders

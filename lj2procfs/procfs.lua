@@ -19,18 +19,19 @@ local procfs_mt = {}
 
 setmetatable(procfs, {
 	__index = function(self, key)
+		-- if it is the 'processes' key, then 
+		-- return the processes iterator
+		if key == "processes" then
+			return procfs_mt.processes
+		end
+
+
 		-- if key is numeric, then return
 		-- a process entry 
 		if type(key) == "number" or tonumber(key) then
 			return ProcessEntry(tonumber(key))
 		end
 
-		-- otherwise, it's a string value, 
-		-- if it is the 'processes' key, then 
-		-- return the processes iterator
-		if key == "processes" then
-			return procfs_mt.processes
-		end
 
 		-- Finally, assume the key is a path  to one
 		-- of the files within the /proc hierarchy
