@@ -1,8 +1,8 @@
  package = "lj2procfs"
- version = "0.1-3"
+ version = "0.1-4"
  source = {
-    url = "https://github.com/wiladams/lj2procfs/archive/v0.1-3.tar.gz",
-    dir = "lj2procfs-0.1-3",
+    url = "https://github.com/wiladams/lj2procfs/archive/v0.1-4.tar.gz",
+    dir = "lj2procfs-0.1-4",
  }
  description = {
     summary = "LuaJIT access to the Linux procfs",
