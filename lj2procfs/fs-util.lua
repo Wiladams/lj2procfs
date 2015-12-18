@@ -2,8 +2,96 @@ local ffi = require("ffi")
 
 local libc = require("lj2procfs.libc")
 local putil = require("lj2procfs.path-util")
-local dirutil = require("lj2procfs.dirent-util")
 
+--[[
+local function isDirectory(entry)
+    return entry.Kind == libc.DT_DIR and 
+        entry.Name ~= '.' and
+        entry.Name ~= '..'
+end
+--]]
+
+local function isDirectory(path)
+    local adir = libc.opendir(path);
+    local res = adir ~= nil
+    if adir ~= nil then
+        libc.closedir(adir)
+    end
+
+    return res;
+end
+
+
+local function isFile(path)
+    local fd = io.open(path)
+    local fdtype = io.type(fd);
+    print("FD TYPE: ", path, fdtype)
+    local res = fdtype == "file"
+    fd:close();
+
+    return res;
+end
+
+--[[
+local function dirent_ensure_type(DIR *d, struct dirent *de)
+        struct stat st;
+
+        assert(d);
+        assert(de);
+
+        if (de.d_type != libc.DT_UNKNOWN)
+                return 0;
+
+        if (fstatat(dirfd(d), de->d_name, &st, AT_SYMLINK_NOFOLLOW) < 0)
+                return -errno;
+
+        de->d_type =
+                S_ISREG(st.st_mode)  ? DT_REG  :
+                S_ISDIR(st.st_mode)  ? DT_DIR  :
+                S_ISLNK(st.st_mode)  ? DT_LNK  :
+                S_ISFIFO(st.st_mode) ? DT_FIFO :
+                S_ISSOCK(st.st_mode) ? DT_SOCK :
+                S_ISCHR(st.st_mode)  ? DT_CHR  :
+                S_ISBLK(st.st_mode)  ? DT_BLK  :
+                                       DT_UNKNOWN;
+
+        return 0;
+end
+--]]
+
+local function dirent_is_file(de)
+    if de == nil then return false; end
+
+    if putil.hidden_file(ffi.string(de.d_name)) then
+        return false;
+    end
+
+    if (de.d_type ~= libc.DT_REG and
+            de.d_type ~= libc.DT_LNK and
+            de.d_type ~= libc.DT_UNKNOWN) then
+                return false;
+    end
+
+    return true;
+end
+
+--[[
+local function  dirent_is_file_with_suffix(const struct dirent *de, const char *suffix)
+        assert(de);
+
+        if (de.d_type ~= libc.DT_REG and
+            de.d_type ~= libc.DT_LNK and
+            de.d_type ~= libc.DT_UNKNOWN) then
+                return false;
+        end
+
+        if (putil.hidden_file_allow_backup(de.d_name)) then
+                return false;
+        end
+
+        return endswith(de.d_name, suffix);
+end
+--]]
 
 local function nil_iter()
     return nil;
@@ -29,7 +117,7 @@ local function iterate_files_in_directory(path)
 
             -- check the entry to see if it's an actual file, and not
             -- a directory or link
-            if dirutil.dirent_is_file(de) then
+            if dirent_is_file(de) then
                 break;
             end
         end
@@ -85,6 +173,11 @@ end
 local exports = {
     files_in_directory = iterate_files_in_directory;
     entries_in_directory = entries_in_directory;
+
+    dirent_is_file = dirent_is_file;
+
+    isDirectory = isDirectory;
+    isFile = isFile;
 }
 
 return exports

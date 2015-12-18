@@ -17,6 +17,8 @@ local function printProcEntry(procEntry)
 	end
 
 	print(string.format("\t},"))
+
+	collectgarbage()
 end
 
 

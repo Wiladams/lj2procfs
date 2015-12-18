@@ -4,6 +4,7 @@ local libc = require("lj2procfs.libc")
 local fun = require("lj2procfs.fun")
 local ProcessEntry = require("lj2procfs.ProcessEntry")
 local Decoders = require("lj2procfs.Decoders")
+local SysEntry = require("lj2procfs.SysEntry")
 
 
 -- take a table with a 'Name' field, which 
@@ -14,18 +15,13 @@ local function toProcessEntry(entry)
 end
 
 
-local procfs = {}
-local procfs_mt = {}
+local procfs = {
+	sys = SysEntry();
+}
+
 
 setmetatable(procfs, {
 	__index = function(self, key)
-		-- if it is the 'processes' key, then 
-		-- return the processes iterator
-		if key == "processes" then
-			return procfs_mt.processes
-		end
-
-
 		-- if key is numeric, then return
 		-- a process entry 
 		if type(key) == "number" or tonumber(key) then
@@ -44,8 +40,7 @@ setmetatable(procfs, {
 })
 
 
-
-function procfs_mt.processes()
+function procfs.processes()
 	return fun.map(toProcessEntry, fun.filter(
 		function(entry)
 			return (entry.Kind == libc.DT_DIR) and tonumber(entry.Name)

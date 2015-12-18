@@ -122,3 +122,12 @@ return {
 Of course, you don't have to generate any output at all.  You could just form
 queries whereby you iterate over processes, looking for specific attributes, and 
 delivering some action based on seeing those attributes.
+
+
+Installation
+============
+
+You can use one of the rockspecs that comes with the release, v0.1-4 is the latest working version.
+
+Alternatively, you can simply copy all the 'lj2procfs' directory into your lua path, such as
+'/usr/local/share/lua/5.1'

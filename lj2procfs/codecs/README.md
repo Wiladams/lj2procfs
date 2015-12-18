@@ -1,10 +1,12 @@
 AVAILABLE
 =========
+/proc/*
 * buddyinfo
 * cgroups
 * cmdline
 * cpuinfo
 * crypto
+* devices
 * diskstats
 * interrupts
 * iomem
@@ -22,6 +24,7 @@ AVAILABLE
 
 Per Process
 -----------
+/proc/[PID]/*
 * environ
 * exe
 * io
@@ -31,12 +34,23 @@ Per Process
 * sched
 * status
 
+Network
+-------
+/proc/net
+* dev
+* netstat
 
-TODO - Flat files in /proc
+Sys
+---
+/proc/sys/*
+/proc/sys/kernel
+* hostname
+* version
+
+TODO
 ====
-buddyinfo
+/proc
 consoles
-devices
 dma
 execdomains
 filesystems

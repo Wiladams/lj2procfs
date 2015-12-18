@@ -35,6 +35,25 @@ struct dirent
 };
 ]]
 
+-- fcntl.h
+ffi.cdef[[
+int open(const char *, int, ...);
+]]
+
+ffi.cdef[[
+static const int	O_ACCMODE	= 00000003;
+static const int	O_RDONLY	= 00000000;
+static const int	O_WRONLY	= 00000001;
+static const int	O_RDWR		= 00000002;
+]]
+
+-- unistd.h
+ffi.cdef[[
+int close(int);
+ssize_t read(int, void *, size_t);
+ssize_t write(int, const void *, size_t);
+]]
+
 ffi.cdef[[
 int            closedir(DIR *);
 DIR           *opendir(const char *);
@@ -57,14 +76,6 @@ setmetatable(exports, {
 		local value = nil;
 		local success = false;
 
---[[
-		-- try looking in table of constants
-		value = C[key]
-		if value then
-			rawset(self, key, value)
-			return value;
-		end
---]]
 
 		-- try looking in the ffi.C namespace, for constants
 		-- and enums
