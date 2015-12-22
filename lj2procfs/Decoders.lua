@@ -14,25 +14,28 @@ end
 -- Use this table if you want to map from the names that 
 -- are relative to the /proc directory, to values sitting
 -- directly within the codec directory
+--[[
 local decoderMap = {
 	["%d+/cwd"] = "linkchaser";
 	["%d+/exe"] = "linkchaser";
 	["%d+/root"] = "linkchaser";
 }
+--]]
 
 local Decoders = {}
 local function findDecoder(self, key)
 	-- traverse through the mappings looking for a match
+--[[
 	for pattern, value in pairs(decoderMap) do
 		if key:match(pattern) then
 			key = value
 			break;
 		end
 	end
-
+--]]
 
 	local path = "lj2procfs.codecs."..key;
---print("PATH: ", path)
+--print("findDecoder(), PATH: ", path)
 
 	-- try to load the intended codec file
 	local success, codec = pcall(function() return require(path) end)

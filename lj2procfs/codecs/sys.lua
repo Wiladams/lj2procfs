@@ -51,6 +51,11 @@ local SysEntry_mt = {
 
 		return get_value(path)
 	end,
+
+	__newindex = function(self, key, value)
+		local path = self.Path..'/'..key;
+		return set_value(value, path)
+	end,
 }
 
 function SysEntry.init(self, path)
@@ -67,4 +72,18 @@ function SysEntry.new(self, path)
 	return self:init(path)
 end
 
-return SysEntry
+local function sys_decoder(path)
+	--print("sys_decoder: ", path)
+	return SysEntry:new(path)
+end
+
+local function sys_encoder(path)
+	print("sys_encoder: ", path)
+	return SysEntry:new(path)
+end
+
+return {
+	decoder = sys_decoder;
+	encoder = sys_encoder;
+}
+

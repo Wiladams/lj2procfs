@@ -2,13 +2,14 @@
 
 --lthostname.lua
 package.path = "../?.lua"
+local procfs = require("lj2procfs.procfs")
 
-local hostname = require("lj2procfs.codecs.sys.kernel.hostname")
 
 local newname = arg[1] or "new-hostname"
 
-print("Hostname GET: ", hostname())
+print("Hostname GET: ", procfs.sys.kernel.hostname);
 
-print("Hostname SET ('"..newname.."'): ", hostname(newname))
+print("Hostname SET ('"..newname.."'): ");
+procfs.sys.kernel.hostname = newname;
 
-print("Hostname GET: ", hostname())
+print("Hostname GET: ", procfs.sys.kernel.hostname);

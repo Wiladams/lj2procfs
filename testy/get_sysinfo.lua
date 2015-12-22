@@ -1,8 +1,16 @@
 #!/usr/bin/env luajit
 
---lthostname.lua
 package.path = "../?.lua"
 
+--[[
+	get_sysinfo.lua
+
+	Retrieve stuff from the /proc/sys/* directory
+	Specify a path to a file, starting with the '/sys' part
+
+	$ ./get_sysinfo.lua sys/kernel/panic
+	
+--]]
 local procfs = require("lj2procfs.procfs")
 local sutil = require("lj2procfs.string-util")
 
