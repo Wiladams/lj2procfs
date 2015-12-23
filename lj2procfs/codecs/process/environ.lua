@@ -1,4 +1,4 @@
-local striter= require("lj2procfs.striter")
+local sutil= require("lj2procfs.string-util")
 
 local function environ(path)
 	-- open the file
@@ -14,7 +14,7 @@ local function environ(path)
 
 	-- The environment variables are separated by a null
 	-- terminator, so the outer iterator is over that
-	for _, elem in striter.mstrziter(str) do
+	for _, elem in sutil.mstrziter(str) do
 		-- Each individual environment variable is a
 		-- key=value pair, so we split those apart.
 		local key, value = elem:match(eqpatt);

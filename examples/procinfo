@@ -10,9 +10,10 @@
 	Here, 'filname' is any one of the files listed in the 
 	/proc directory.
 
-	In the cases where a decoder is implemented in Decoders.lua
-	the file will be parsed, and an appropriate value will be
-	returned and printed in a lua form appropriate for reparsing.
+	In the cases where a decoder is implemented and sitting in the
+	codecs/ directory, the file will be parsed, and an appropriate 
+	value will bereturned and printed in a lua form appropriate for 
+	reparsing.
 
 	When there is no decoder implemented, the value returned is
 	"NO DECODER AVAILABLE"
@@ -25,7 +26,6 @@
 
 --]]
 
---package.path = "../?.lua;"..package.path;
 
 local procfs = require("lj2procfs.procfs")
 local putil = require("lj2procfs.print-util")

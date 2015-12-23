@@ -1,5 +1,9 @@
---findsym.lua
+#!/usr/bin/env luajit
 package.path = "../?.lua;"..package.path;
+
+--[[
+	Find a kernel symbol located in the /proc/kallsyms file.
+--]]
 
 local sym = arg[1]
 assert(sym, "must specify a symbol")

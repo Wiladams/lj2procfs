@@ -1,6 +1,5 @@
 #!/usr/bin/env luajit
 
---lthostname.lua
 package.path = "../?.lua"
 
 local procfs = require("lj2procfs.procfs")

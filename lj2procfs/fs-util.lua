@@ -1,7 +1,39 @@
 local ffi = require("ffi")
 
 local libc = require("lj2procfs.libc")
-local putil = require("lj2procfs.path-util")
+local sutil = require("lj2procfs.string-util")
+
+function hidden_file_allow_backup(filename)
+    if not filename then return false end
+
+    return
+        sutil.startswith(filename, '.') or
+        filename == "lost+found" or
+        filename == "aquota.user" or
+        filename == "aquota.group" or
+        sutil.endswith(filename, ".rpmnew") or
+        sutil.endswith(filename, ".rpmsave") or
+        sutil.endswith(filename, ".rpmorig") or
+        sutil.endswith(filename, ".dpkg-old") or
+        sutil.endswith(filename, ".dpkg-new") or
+        sutil.endswith(filename, ".dpkg-tmp") or
+        sutil.endswith(filename, ".dpkg-dist") or
+        sutil.endswith(filename, ".dpkg-bak") or
+        sutil.endswith(filename, ".dpkg-backup") or
+        sutil.endswith(filename, ".dpkg-remove") or
+        sutil.endswith(filename, ".swp");
+end
+
+function isHiddenFile(filename)
+    if not filename then return false; end
+
+    if sutil.endswith(filename, "~") then
+        return true;
+    end
+
+    return hidden_file_allow_backup(filename);
+end
+
 
 --[[
 local function isDirectory(entry)
@@ -62,7 +94,7 @@ end
 local function dirent_is_file(de)
     if de == nil then return false; end
 
-    if putil.hidden_file(ffi.string(de.d_name)) then
+    if isHiddenFile(ffi.string(de.d_name)) then
         return false;
     end
 
@@ -85,7 +117,7 @@ local function  dirent_is_file_with_suffix(const struct dirent *de, const char *
                 return false;
         end
 
-        if (putil.hidden_file_allow_backup(de.d_name)) then
+        if (isHiddenFile_allow_backup(de.d_name)) then
                 return false;
         end
 
@@ -178,6 +210,7 @@ local exports = {
 
     isDirectory = isDirectory;
     isFile = isFile;
+    isHiddenFile = isHiddenFile
 }
 
 return exports

@@ -1,5 +1,5 @@
 -- can be used for both /proc/cmdline, and /proc/[pid]/cmdline
-local striter= require("lj2procfs.striter")
+local sutil= require("lj2procfs.string-util")
 
 local function decoder(path)
 	-- open the file
@@ -9,7 +9,7 @@ local function decoder(path)
 
 	local tbl = {}
 	-- can possibly be a string of '\0' delimited values
-	for _, str in striter.mstrziter(str) do
+	for _, str in sutil.mstrziter(str) do
 		table.insert(tbl,str)
 	end
 

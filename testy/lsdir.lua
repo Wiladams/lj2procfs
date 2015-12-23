@@ -1,4 +1,4 @@
---test_iterate_directory.lua
+#!/usr/bin/env luajit
 package.path = "../?.lua;"..package.path;
 
 local fs = require("lj2procfs.fs-util")
@@ -13,8 +13,6 @@ local function printEntries(path)
 		putil.printValue(entry, '  ', entry.Name)
 	end
 end
-
-
 
 
 local path = arg[1] or "/proc"
