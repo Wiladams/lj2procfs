@@ -29,8 +29,10 @@ if not sutil.startswith(path,"sys") then
 	path = "sys"..sep..path
 end
 
+
 -- The segments can be separated with either a '.' 
 -- or '/'
+print("path: ", path)
 local segments = sutil.tsplit(path, "[%./]")
 
 local node = procfs;

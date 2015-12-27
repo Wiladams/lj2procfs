@@ -85,5 +85,6 @@ end
 return {
 	decoder = sys_decoder;
 	encoder = sys_encoder;
+	sysfs = SysEntry;
 }
 
