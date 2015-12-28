@@ -42,6 +42,16 @@ setmetatable(SysEntry, {
 
 
 local SysEntry_mt = {
+	__pairs = function(tbl)
+  		local function gen(tbl, k)
+    		local v
+      		k, v = next(tbl, k)
+    		return k, v
+  		end
+
+  		return gen, tbl, nil
+	end,
+
 	__index = function(self, key)
 		local path = self.Path..'/'..key;
 
