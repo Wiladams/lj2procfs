@@ -19,6 +19,8 @@ package.path = "../?.lua"
 local procfs = require("lj2procfs.procfs")
 local sutil = require("lj2procfs.string-util")
 local sysfs = require("lj2procfs.codecs.sys")
+local putil = require("lj2procfs.print-util")
+
 
 local path = arg[1] or ""
 local sep = '/'
@@ -39,4 +41,5 @@ for i=1,#segments do
     node = node[segments[i]]
 end
 
-print(path..': ', node)
+print(path..': ')
+putil.printValue(node)
