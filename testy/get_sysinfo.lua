@@ -7,7 +7,7 @@ package.path = "../?.lua"
 
 	Retrieve stuff from the /proc/sys/* directory
 	Specify a path to a file, starting with the part
-	after '/sys', 
+	after '/procfs/sys', 
 
 	$ ./get_sysinfo.lua kernel/panic
 	
