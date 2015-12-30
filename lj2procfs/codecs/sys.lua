@@ -1,6 +1,8 @@
 --ProcessEntry.lua
 local libc = require("lj2procfs.libc")
 local fs = require("lj2procfs.fs-util")
+local fun = require("lj2procfs.fun")
+local putil = require("lj2procfs.print-util")
 
 
 local function get_value(path)
@@ -13,6 +15,8 @@ local function get_value(path)
 	local str = f:read("*a")
 	f:close()
 
+	if not str then return nil end;
+	
 	local vpatt = "(.*)$"
 	local vstr = str:match(vpatt)
 
@@ -40,16 +44,36 @@ setmetatable(SysEntry, {
 	end,
 })
 
+local function toSysEntry(entry)
+	--print("== ToSysEntry == ")
+	local sentry = SysEntry:new(entry.Path);
+	--putil.printValue(sentry)
+	
+	return sentry
+end
+
+local function interestingEntry(entry)
+	return not (entry.Name == '.' or entry.Name == "..")
+end
 
 local SysEntry_mt = {
 	__pairs = function(tbl)
-  		local function gen(tbl, k)
-    		local v
-      		k, v = next(tbl, k)
-    		return k, v
-  		end
+		--print("SysEntry_mt.__pairs: ", tbl.Path, fs.isDirectory(tbl.Path))
+		if not fs.isDirectory(tbl.Path) then
+			local alreadyCalled = false;	
+			local function callOnce(param, state)
+				if alreadyCalled then return nil end;
+				
+				alreadyCalled = not alreadyCalled;
 
-  		return gen, tbl, nil
+				return tbl.Path, get_value(tbl.Path)
+			end
+
+			return callOnce, tbl, false
+		end
+		
+--		return fun.map(toSysEntry, fs.files_in_directory(tbl.Path))
+		return fun.map(toSysEntry, fun.filter(interestingEntry, fs.entries_in_directory(tbl.Path)))
 	end,
 
 	__index = function(self, key)
@@ -88,7 +112,7 @@ local function sys_decoder(path)
 end
 
 local function sys_encoder(path)
-	print("sys_encoder: ", path)
+	--print("sys_encoder: ", path)
 	return SysEntry:new(path)
 end
 

@@ -12,7 +12,10 @@ local function literalForValue(avalue)
 end
 
 local function printValue(avalue, indent, name)
+	if not avalue then return end;
+
 	indent = indent or ""
+
 
 	if type(avalue) == "table" then
 		if name then

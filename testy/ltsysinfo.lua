@@ -32,14 +32,13 @@ end
 
 -- The segments can be separated with either a '.' 
 -- or '/'
-print("path: ", path)
 local segments = sutil.tsplit(path, "[%./]")
 
 local node = sysfs.sysfs("/sys");
 for i=1,#segments do
-    print(segments[i])
+--    print(segments[i])
     node = node[segments[i]]
 end
 
-print(path..': ')
+--print("node: ", node)
 putil.printValue(node)
