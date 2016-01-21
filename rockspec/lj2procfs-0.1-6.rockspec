@@ -42,6 +42,7 @@
       ["lj2procfs.codecs.cmdline"] = "lj2procfs/codecs/cmdline.lua",
       ["lj2procfs.codecs.cpuinfo"] = "lj2procfs/codecs/cpuinfo.lua",
       ["lj2procfs.codecs.crypto"] = "lj2procfs/codecs/crypto.lua",
+      ["lj2procfs.codecs.devices"] = "lj2procfs/codecs/devices.lua",
       ["lj2procfs.codecs.diskstats"] = "lj2procfs/codecs/diskstats.lua",
       ["lj2procfs.codecs.interrupts"] = "lj2procfs/codecs/interrupts.lua",
       ["lj2procfs.codecs.iomem"] = "lj2procfs/codecs/iomem.lua",
@@ -53,11 +54,12 @@
       ["lj2procfs.codecs.net"] = "lj2procfs/codecs/net.lua",
       ["lj2procfs.codecs.partitions"] = "lj2procfs/codecs/partitions.lua",
       ["lj2procfs.codecs.softirqs"] = "lj2procfs/codecs/softirqs.lua",
+      ["lj2procfs.codecs.stat"] = "lj2procfs/codecs/stat.lua",
       ["lj2procfs.codecs.sys"] = "lj2procfs/codecs/sys.lua",
       ["lj2procfs.codecs.uptime"] = "lj2procfs/codecs/uptime.lua",
       ["lj2procfs.codecs.vmstat"] = "lj2procfs/codecs/vmstat.lua",
 
-      -- codecs for flat files in /proc/process
+      -- codecs for flat files in /proc/[PID]
       ["lj2procfs.codecs.process.environ"] = "lj2procfs/codecs/process/environ.lua",
       ["lj2procfs.codecs.process.exe"] = "lj2procfs/codecs/process/exe.lua",
       ["lj2procfs.codecs.process.io"] = "lj2procfs/codecs/process/io.lua",
