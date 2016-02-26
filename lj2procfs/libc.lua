@@ -111,6 +111,12 @@ static const int	O_RDWR		= 00000002;
 
 -- unistd.h
 ffi.cdef[[
+// BUGBUG - This should be version specific
+// as v2.1 has ssize_t
+typedef size_t ssize_t;
+]]
+
+ffi.cdef[[
 int close(int);
 ssize_t read(int, void *, size_t);
 ssize_t write(int, const void *, size_t);
