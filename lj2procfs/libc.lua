@@ -110,11 +110,17 @@ static const int	O_RDWR		= 00000002;
 ]]
 
 -- unistd.h
+local function hasSSizeT()
+	local def = pcall(function() return ffi.typeof("ssize_t") end)
+	return def
+end
+
+if not hasSSizeT() then
+
 ffi.cdef[[
-// BUGBUG - This should be version specific
-// as v2.1 has ssize_t
 typedef size_t ssize_t;
 ]]
+end
 
 ffi.cdef[[
 int close(int);
