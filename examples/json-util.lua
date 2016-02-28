@@ -1,4 +1,9 @@
 #!/usr/bin/env luajit
+--[[ This util prints proc info in JSON format.
+     Usage: ./json-util.lua stat
+            ./json-util.lua meminfo
+            ./json-util.lua cpuinfo
+    ]]--
 
 local function literalForValue(avalue)
     if type(avalue) == "number" or type(avalue) == "boolean" then
