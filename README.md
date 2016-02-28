@@ -127,7 +127,20 @@ delivering some action based on seeing those attributes.
 Installation
 ============
 
-You can use one of the rockspecs that comes with the release, v0.1-4 is the latest working version.
+There are a couple of ways to install the package into your 
+luajit environment.  The first method involves using luarocks.  If
+you have luarocks, you can install one of the existing pre-packaged
+rocks from well known repositories using the following:
 
-Alternatively, you can simply copy all the 'lj2procfs' directory into your lua path, such as
+$ luarocks install lj2procfs
+
+
+Alternatively, if you want to install directly from the repository
+you can simply copy the appropriate files into a well known lua
+modules directory.  On Linux systems, this might be:
+
 '/usr/local/share/lua/5.1'
+
+While sitting in the l2jprocfs directory, you might do:
+
+$sudo cp -r lj2procfs /usr/local/share/lua/5.1
